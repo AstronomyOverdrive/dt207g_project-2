@@ -16,7 +16,7 @@ async function makeApiCall(apiUrl, extras) {
 	try {
 		const response = await fetch(apiUrl, extras);
 		const responseData = await response.json();
-		if (response.status === 200) { // Succesful menu fetch
+		if (response.status === 200  || response.status === 201) { // Succesful menu fetch
 			return responseData;
 		} else { // Unsuccesful fetch call
 			infoBox.textContent = "Något gick fel, försök igen senare";
@@ -34,7 +34,7 @@ function populateMenu(data) {
 		// Create div for menu item
 		let menuItem = document.createElement("div");
 		// Create header for item title
-		let dishName = document.createElement("h3");
+		let dishName = document.createElement("h4");
 		dishName.textContent = `${item.name} - ${item.price}:-`;
 		// Create paragraph for item decription
 		let dishDescription = document.createElement("p");
