@@ -2,6 +2,13 @@
 
 const menuDiv = document.getElementById("menu");
 const infoBox = document.getElementById("info-box");
+const modeCheck = document.getElementById("edit");
+const editId = document.getElementById("id");
+const dishName = document.getElementById("name");
+const dishDesc = document.getElementById("description");
+const dishPrice = document.getElementById("price");
+const updateBtn = document.getElementById("update-btn");
+
 let token = "";
 
 // Make fetch calls
@@ -71,6 +78,72 @@ async function deleteItem(id) {
 	setupPage();
 }
 
+// Add to menu or update menu items
+async function updateMenu() {
+	const itemName = dishName.value;
+	const itemDesc = dishDesc.value;
+	const itemPrice = dishPrice.value;
+	const itemId = editId.value;
+	const editMode = modeCheck.checked;
+	// Basic validation
+	if (itemName !== "" && itemDesc !== "" && itemPrice !== "") {
+		if (itemName.length <= 25) {
+			if (itemDesc.length <= 120) {
+				if (editMode) { // Edit existing item
+					// Make request to edit menu item
+					await makeApiCall(
+						"http://0.0.0.0:8000/staff/menu/edit",
+						{
+							method: "PUT",
+							headers: {
+								"Content-Type": "application/json",
+								"Authorization": "Bearer " + token
+							},
+							body: JSON.stringify({
+								"name": itemName,
+								"description": itemDesc,
+								"price": Number(itemPrice),
+								"id": itemId
+							})
+						}
+					);
+				} else { // Create new item
+					// Make request to add menu item
+					await makeApiCall(
+						"http://0.0.0.0:8000/staff/menu/add",
+						{
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								"Authorization": "Bearer " + token
+							},
+							body: JSON.stringify({
+								"name": itemName,
+								"description": itemDesc,
+								"price": Number(itemPrice)
+							})
+						}
+					);
+				}
+			} else {
+				infoBox.textContent = "Beskrivning kan max vara 120 tecken";
+			}
+		} else {
+			infoBox.textContent = "Namn kan max vara 25 tecken";
+		}
+	} else {
+		infoBox.textContent = "Alla fällt måste fyllas i";
+	}
+	// Clear form inputs
+	dishName.value = "";
+	dishDesc.value = "";
+	dishPrice.value = "";
+	editId.value = "";
+	modeCheck.checked = false;
+	// Refresh menu on page
+	setupPage();
+}
+
 // Request menu items
 async function setupPage() {
 	// Set JWT token for later use
@@ -89,4 +162,5 @@ async function setupPage() {
 	populateMenu(menuItems);
 }
 
+updateBtn.addEventListener("click", updateMenu);
 addEventListener("load", setupPage);
