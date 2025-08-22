@@ -9,7 +9,7 @@ const loginDiv = document.getElementById("login");
 const logoutDiv = document.getElementById("logout");
 
 // Make login request
-async function loginUser(apiUrl, extras) {
+async function loginUser() {
 	const userName = usernameField.value;
 	const passWord = passwordField.value;
 	if (isNameValid(userName)) {
