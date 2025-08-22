@@ -6,6 +6,7 @@
 		<title>Anställd - India Express</title>
 		<link href="css/styles.css" rel="stylesheet">
 		<script src="js/token.js" type="module"></script>
+		<script src="js/admin.js" type="module"></script>
 	</head>
 	<body>
 		<header>
@@ -24,6 +25,18 @@
 
 		<main>
 			<h2>Admin</h2>
+			<div id="info-box"></div>
+			<h3>Registrera användare</h3>
+			<form>
+				<fieldset>
+					<legend>Registrera</legend>
+					<label for="username">Användarnamn: </label>
+					<input type="text" id="username" name="username" placeholder="Användarnamn" required><br>
+					<label for="password">Lösenord: </label>
+					<input type="password" id="password" name="password" placeholder="Lösenord" required><br>
+					<button type="button" id="register-btn">Registrera</button>
+				</fieldset>
+			</form>
 		</main>
 
 		<footer>
