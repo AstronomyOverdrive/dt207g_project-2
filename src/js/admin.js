@@ -106,7 +106,7 @@ async function editDescription() {
 				"Authorization": "Bearer " + token
 			},
 			body: JSON.stringify({
-				"description": newDescription
+				"about": newDescription
 			})
 		}
 	);
