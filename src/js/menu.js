@@ -21,7 +21,9 @@ async function makeApiCall(apiUrl, extras) {
 
 // Add menu items, textContent and innerText is used to prevent XSS attacks
 function populateMenu(data) {
+	menuDiv.innerHTML = "";
 	data.forEach(item => {
+		// Clear menu div
 		// Create div for menu item
 		let menuItem = document.createElement("div");
 		// Create header for item title
@@ -37,7 +39,7 @@ function populateMenu(data) {
 		let delButton = document.createElement("button");
 		delButton.textContent = "Ta bort";
 		delButton.addEventListener("click", () => {
-			//
+			deleteItem(item._id);
 		});
 		// Append elements to menu item
 		menuItem.appendChild(dishName);
@@ -47,6 +49,26 @@ function populateMenu(data) {
 		// Append menu item to container div
 		menuDiv.appendChild(menuItem);
 	});
+}
+
+// Delete item from menu
+async function deleteItem(id) {
+	// Make request to delete menu item
+	await makeApiCall(
+		"http://0.0.0.0:8000/staff/menu/delete",
+		{
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + token
+			},
+			body: JSON.stringify({
+				"id": id
+			})
+		}
+	);
+	// Refresh menu on page
+	setupPage();
 }
 
 // Request menu items
