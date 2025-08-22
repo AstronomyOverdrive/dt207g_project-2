@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Anställd - India Express</title>
 		<link href="css/styles.css" rel="stylesheet">
-		<script src="js/main.js" type="module"></script>
+		<script src="js/login.js" type="module"></script>
 	</head>
 	<body>
 		<header>
@@ -24,6 +24,23 @@
 
 		<main>
 			<h2>Logga in</h2>
+			<form>
+				<fieldset>
+					<div id="login">
+						<legend>Logga in</legend>
+						<label for="username">Användarnamn: </label>
+						<input type="text" id="username" name="username" placeholder="Användarnamn" required><br>
+						<label for="password">Lösenord: </label>
+						<input type="password" id="password" name="password" placeholder="Lösenord" required><br>
+						<button type="button" id="login-btn">Logga in</button>
+					</div>
+					<div id="logout">
+						<legend>Logga ut</legend>
+						<button type="button" id="logout-btn">Logga ut</button>
+					</div>
+					<div id="info-box"></div>
+				</fieldset>
+			</form>
 		</main>
 
 		<footer>
