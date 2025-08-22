@@ -1,0 +1,17 @@
+{
+  "name": "dt207g_project-2",
+  "version": "1.0.0",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, Firefox ESR, not dead",
+  "scripts": {
+    "start": "rm -f .parcel-cache/* && parcel",
+    "build": "rm -f dist/* docs/* && parcel build --no-source-maps --public-url ./ && cp dist/* docs/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "parcel": "^2.15.4"
+  }
+}
