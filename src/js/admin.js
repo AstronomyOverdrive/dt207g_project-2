@@ -6,6 +6,8 @@ const adminBox = document.getElementById("admin");
 const registerBtn = document.getElementById("register-btn");
 const deluserField = document.getElementById("deluser");
 const removeBtn = document.getElementById("remove-btn");
+const descriptionText = document.getElementById("description");
+const editBtn = document.getElementById("edit-btn");
 const infoBox = document.getElementById("info-box");
 let token = "";
 
@@ -21,7 +23,7 @@ async function makeApiCall(apiUrl, extras) {
 			}, 2000);
 			return responseData;
 		} else if (response.status === 401 || response.status === 403) { // No token or invalid token
-			infoBox.innerHTML = "Ogiltig behörighet, testa att <a href='login.html'>logga in</a> på nytt";
+			infoBox.innerHTML = "Ogiltig behörighet, testa att <a href='login.html'>logga in</a> på nytt som admin";
 		} else if (response.status === 409) {
 			infoBox.textContent = "Användare finns redan";
 		} else {
@@ -92,13 +94,44 @@ async function removeUser() {
 	deluserField.value = "";
 }
 
-// Set JWT token for later use
-function setToken() {
+// Edit company description
+async function editDescription() {
+	const newDescription = descriptionText.value;
+	await makeApiCall(
+		"http://0.0.0.0:8000/staff/about/edit",
+		{
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + token
+			},
+			body: JSON.stringify({
+				"description": newDescription
+			})
+		}
+	);
+}
+
+// Setup admin page
+async function setupPage() {
+	// Set JWT token for later use
 	if (token === "") {
 		token = localStorage.getItem("JWT");
 	}
+	// Load company description
+	const currentDesc = await makeApiCall(
+		"http://0.0.0.0:8000/public/about",
+		{
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		}
+	);
+	descriptionText.value = currentDesc[0].description;
 }
 
 registerBtn.addEventListener("click", registerUser);
 removeBtn.addEventListener("click", removeUser);
-addEventListener("load", setToken);
+editBtn.addEventListener("click", editDescription);
+addEventListener("load", setupPage);
