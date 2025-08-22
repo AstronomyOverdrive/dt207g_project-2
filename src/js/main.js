@@ -2,6 +2,7 @@
 
 const listElement = document.getElementById("orders");
 let menuItems = [];
+let token = "";
 
 // Make fetch calls
 async function makeApiCall(apiUrl, extras) {
@@ -34,8 +35,11 @@ async function requestOrders() {
 			}
 		);
 	}
+	// Check if token is unset
+	if (token === "") {
+		token = localStorage.getItem("JWT");
+	}
 	// Check if a token is stored
-	const token = localStorage.getItem("JWT");
 	if (token) {
 		// Get all orders
 		const orders = await makeApiCall(
@@ -48,6 +52,8 @@ async function requestOrders() {
 				}
 			}
 		);
+		// Clear list element
+		listElement.innerHTML = "";
 		orders.forEach(order => {
 			if (!order.completed) { // Only display active orders
 				// Get name of ordered items
@@ -62,7 +68,7 @@ async function requestOrders() {
 				const markBtn = document.createElement("button");
 				markBtn.textContent = "Klar";
 				markBtn.addEventListener("click", () => {
-					markAsComplete(order._id);
+					markAsCompleted(order._id);
 				});
 				// Set list item text
 				listItem.innerText = `Beställning: ${items}
@@ -80,6 +86,27 @@ async function requestOrders() {
 			}
 		});
 	}
+}
+
+// Update order to be completed
+async function markAsCompleted(id) {
+	const token = localStorage.getItem("JWT");
+	// Make request
+	await makeApiCall(
+		"http://0.0.0.0:8000/staff/orders/done",
+		{
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				"Authorization": "Bearer " + token
+			},
+			body: JSON.stringify({
+				"id": id
+			})
+		}
+	);
+	// Refresh list
+	requestOrders();
 }
 
 addEventListener("load", requestOrders);
